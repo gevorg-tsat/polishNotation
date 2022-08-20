@@ -23,10 +23,57 @@ int brackets(char *str) {
         if (str[i] == ')')
             num--;
         if (num < 0)
-            return i;
+            return num;
         i++;
     }
     return num;
+}
+
+
+int sign_check(char* str, int n, int biflag) {
+    int flag = 0;
+    char* symb = "*/+-";
+    char* nums = "1234567890";
+    if (str[0] == '-') {
+        for (int j = n; j > 0; j--){
+            str[j] = str[j - 1];
+        }
+        n++;
+        str[0] = '0';
+    }
+    for (int i = 1; i < n; i++) {
+        if (str[i] == '-' && str[i - 1] == '(') {
+            for (int j = n + 1; j > i; j--)
+                str[j] = str[j - 1];
+            str[i] = '0';
+            n++;    
+        }
+    }
+    for (int i = 0; i < n; i++) {
+        if (!flag) {
+            if (str[i] == 'c' && ((str + i) == strstr((str + i), "ctg(") || (str + i) == strstr((str + i), "cos("))) {
+                i += 2;
+            } else if (str[i] == 's' && (str + i) == strstr((str + i), "sin(")) {
+                i += 2;
+            } else if (str[i] == 's' && (str + i) == strstr((str + i), "sqrt(")) {
+                i += 3;
+            } else if (str[i] == 't' && (str + i) == strstr((str + i), "tan(")) {
+                i += 2;
+            } else if (str[i] == 'l' && (str + i) == strstr((str + i), "ln(")) {
+                i += 1;
+            } else if ((strchr(symb, str[i]) != NULL && !biflag) || str[i] == '(') {
+                flag = sign_check((str + i + 1), 1, 1);
+            } else if ((str[i] == ')' && !biflag) 
+            || (strchr(nums, str[i]) != NULL && str[i + 1] != '(' && str[i - 1] != ')')
+            || (str[i] == '.' && strchr(nums, str[i + 1]) != NULL)) {
+            } else if (str[i] == 'x' && strchr(nums, str[i + 1]) == NULL && strchr(nums, str[i - 1]) == NULL && str[i + 1] != '(' && str[i - 1] != ')') {
+            } else {
+                flag = 1;
+                break;
+            }
+        }
+    }
+    return flag;
 }
 
 char* str_to_polish(char *str) {
@@ -112,11 +159,11 @@ char* str_to_polish(char *str) {
 
 struct node* stacking(struct node* root, int prior, char c, char *polish, int *n) {
     if (root == NULL) {
-        root = init(1, c);
+        root = init(prior, c);
     } else {
         root = push(root, c, prior);
         struct node *tmp = root;
-        while (!(tmp -> next) && tmp -> next -> data != '(') {
+        while ((tmp -> next) && (tmp -> next -> data != '(')) {
             if (tmp -> next -> prior > prior) {
                 polish[(*n)++] = ' ';
                 polish[(*n)++] = tmp -> next -> data;

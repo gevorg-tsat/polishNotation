@@ -2,6 +2,7 @@
 #include <stdio.h>
 
 int main() {
-    char *str = str_to_polish("cos(2*x)*(9+cos(x))*sin(9*cos(ln(x)))+1-9\0");
+    char *str = "3*3*3+5\0";
+    str = str_to_polish(str);
     printf("%s", str);
 }

@@ -12,6 +12,7 @@ struct node* push(struct node *root, char data, int prior) {
     struct node *tmp = malloc(sizeof(struct node));
     tmp -> next = root;
     tmp -> data = data;
+    tmp -> prior = prior;
     root = tmp;
     return root;
 }
@@ -21,7 +22,6 @@ struct node* push(struct node *root, char data, int prior) {
 struct node* pop(struct node *root) {
     struct node *tmp = root;
     root = tmp -> next;
-    tmp -> next = 0;
     free(tmp);
     return root;
 }
