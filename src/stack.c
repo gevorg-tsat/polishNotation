@@ -18,11 +18,12 @@ struct node* push(struct node *root, int data) {
 
 
 
-void pop(struct node **root) {
-    struct node *tmp = (*root);
-    (*root) = tmp -> next;
+struct node* pop(struct node *root) {
+    struct node *tmp = root;
+    root = tmp -> next;
     tmp -> next = 0;
-    return tmp;
+    free(tmp);
+    return root;
 }
 
 void destroy(struct node *root) {

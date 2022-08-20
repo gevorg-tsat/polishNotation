@@ -12,7 +12,7 @@ struct node {
 int prior_check(char *str);
 struct node* init(int prior, char data);
 struct node* push(struct node *root, char data, int prior);
-void pop(struct node **root);
+struct node* pop(struct node *root);
 void destroy(struct node *root);
 
 #endif  // SRC_STACK_H_

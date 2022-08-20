@@ -55,18 +55,47 @@ char* str_to_polish(char *str) {
             polish[n++] = str[i];
         } else if (strchr(str[i], first) != NULL) {
             flag_dot = flag_num = 0;
-            if (root == NULL) {
-                root = init(1, str[i]);
-            } else
-                root = push(root, str[i], 1);
-        } else if (strchr(str[i], first) != NULL) {
+            root = stacking(root, 1, str[i], polish, &n);
+        } else if (strchr(str[i], second) != NULL) {
             flag_dot = flag_num = 0;
-            if (root = NULL)
-                root = init(2, str[i]);
-            else {
+            root = stacking(root, 2, str[i], polish, &n);
+        } else if (strstr(str + i, "sin") == str + i) {
+            flag_dot = flag_num = 0;
+            root = stacking(root, 3, 's', polish, &n);
+        } else if (strstr(str + i, "cos") == str + i) {
+            flag_dot = flag_num = 0;
+            root = stacking(root, 3, 'c', polish, &n);
+        } else if (strstr(str + i, "tan") == str + i) {
+            flag_dot = flag_num = 0;
+            root = stacking(root, 3, 't', polish, &n);
+        } else if (strstr(str + i, "ctg") == str + i) {
+            flag_dot = flag_num = 0;
+            root = stacking(root, 3, 'g', polish, &n);
+        } else if (strstr(str + i, "sqrt") == str + i) {
+            flag_dot = flag_num = 0;
+            root = stacking(root, 3, 'q', polish, &n);
+        } else if (strstr(str + i, "ln") == str + i) {
+            flag_dot = flag_num = 0;
+            root = stacking(root, 3, 'l', polish, &n);
+        } else if (str[i] == ')')
 
+        i++;
+    }
+}
+
+struct node* stacking(struct node* root, int prior, char c, char *polish, int *n) {
+    if (root == NULL) {
+        root = init(1, c);
+    } else {
+        root = push(root, c, prior);
+        struct node *tmp = root;
+        while (!(tmp -> next) && tmp -> next -> data != '(') {
+            if (tmp -> next -> prior > prior) {
+                polish[(*n)++] = ' ';
+                polish[(*n)++] = tmp -> next -> data;
+                tmp -> next = pop(tmp -> next);
             }
         }
-
     }
+    return root;
 }
