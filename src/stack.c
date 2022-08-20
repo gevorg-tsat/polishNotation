@@ -8,7 +8,7 @@ struct node* init(int prior, char data) {
     return tmp;
 }
 
-struct node* push(struct node *root, int data) {
+struct node* push(struct node *root, char data, int prior) {
     struct node *tmp = malloc(sizeof(struct node));
     tmp -> next = root;
     tmp -> data = data;

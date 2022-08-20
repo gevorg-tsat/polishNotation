@@ -1,4 +1,5 @@
-#include <stack.h>
+#include "stack.h"
+#include <stdio.h>
 
 int prior(char *str);
 char* str_to_polish(char *str);

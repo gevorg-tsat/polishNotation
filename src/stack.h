@@ -5,7 +5,7 @@
 
 struct node {
     struct node *next;
-    char *data;
+    char data;
     int prior;
 };
 

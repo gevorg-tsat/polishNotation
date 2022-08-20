@@ -42,45 +42,72 @@ char* str_to_polish(char *str) {
         if (str[i] == '.' && !flag_dot) {
             polish[n++] = str[i];
             flag_dot = 1;
-        }
-        else if (str[i] == '.' && flag_dot) {
+        } else if (str[i] == '.' && flag_dot) {
             free(polish);
             return NULL;
-        } 
-        else if (strstr(numbers, str[i]) && flag_num == 0) {
+        } else if (strchr(numbers, str[i]) && flag_num == 0) {
             polish[n++] = ' ';
             polish[n++] = str[i];
             flag_num = 1;
-        } else if (strstr(numbers, str[i]) && flag_num == 1) {
+        } else if (strchr(numbers, str[i]) && flag_num == 1) {
             polish[n++] = str[i];
-        } else if (strchr(str[i], first) != NULL) {
+        } else if (strchr(first, str[i]) != NULL) {
             flag_dot = flag_num = 0;
             root = stacking(root, 1, str[i], polish, &n);
-        } else if (strchr(str[i], second) != NULL) {
+        } else if (strchr(second, str[i]) != NULL) {
             flag_dot = flag_num = 0;
             root = stacking(root, 2, str[i], polish, &n);
         } else if (strstr(str + i, "sin") == str + i) {
             flag_dot = flag_num = 0;
             root = stacking(root, 3, 's', polish, &n);
+            i += 2;
         } else if (strstr(str + i, "cos") == str + i) {
             flag_dot = flag_num = 0;
             root = stacking(root, 3, 'c', polish, &n);
+            i += 2;
         } else if (strstr(str + i, "tan") == str + i) {
             flag_dot = flag_num = 0;
             root = stacking(root, 3, 't', polish, &n);
+            i += 2;
         } else if (strstr(str + i, "ctg") == str + i) {
             flag_dot = flag_num = 0;
             root = stacking(root, 3, 'g', polish, &n);
+            i += 2;
         } else if (strstr(str + i, "sqrt") == str + i) {
             flag_dot = flag_num = 0;
             root = stacking(root, 3, 'q', polish, &n);
+            i += 3;
         } else if (strstr(str + i, "ln") == str + i) {
             flag_dot = flag_num = 0;
             root = stacking(root, 3, 'l', polish, &n);
-        } else if (str[i] == ')')
-
+            i += 1;
+        } else if (str[i] == '(') {
+            flag_dot = flag_num = 0;
+            root = stacking(root, 0, '(', polish, &n);
+        } else if (str[i] == ')') {
+            flag_dot = flag_num = 0;
+            while (root -> data != '(') {
+                polish[n++] = ' ';
+                polish[n++] = root -> data;
+                root = pop(root);
+            }
+            root = pop(root);
+            if (root->data == 'c' || root->data == 's' || root->data == 'q' || root->data == 'g'
+                || root->data == 'l' || root->data == 't') {
+                polish[n++] = ' ';
+                polish[n++] = root -> data;
+                root = pop(root);
+            }
+        }
         i++;
     }
+    while (root) {
+        polish[n++] = ' ';
+        polish[n++] = root -> data;
+        root = pop(root);
+    }
+    printf("%s", polish);
+    polish[n++] = '\0';
 }
 
 struct node* stacking(struct node* root, int prior, char c, char *polish, int *n) {
