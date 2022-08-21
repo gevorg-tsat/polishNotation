@@ -12,12 +12,12 @@ operation_stack *stack_from_expression(char *expression) {
     }
     operation_stack *stack = init_operation_stack(INIT_CAPACITY);
     while (*expression) {
+        while (is_space(expression) && !is_eof(expression)) {
+            ++expression;
+        }
         if (is_eof(expression)) {
             break;
         }
-        // while (is_space(expression) && !is_eof(expression)) {
-        //     ++expression;
-        // }
         if (is_x(expression)) {
             operation_node new_node = {.type = variable, .variable = 'x'};
             int res = operation_stack_push_back(stack, new_node);
@@ -72,9 +72,7 @@ operation_stack *stack_from_expression(char *expression) {
             }
             expression = tmp;
         }
-        // if (expression+1) {
             ++expression;
-        // }
         
     }
     return stack;
@@ -196,14 +194,17 @@ int calc_exp_postfix(const operation_stack * expression, double var, double* exp
     operation_stack* copy_expression = copy_operation_stack(*expression);
     operation_stack* operands = init_operation_stack(INIT_CAPACITY);
     reverse_operation_stack(copy_expression);
-    while (!empty_operation_stack(copy_expression)) {
-        switch (top_operation_stack(copy_expression)->type) {
+    while (empty_operation_stack(copy_expression)) {
+        operation_node oper = *top_operation_stack(copy_expression);
+        printf("type = %d\n", oper.type);
+        int res = pop_operation_stack(copy_expression);
+        if (res) {
+            return res;
+        }
+        switch (oper.type) {
         case value: {
-            int res = operation_stack_push_back(operands, *top_operation_stack(copy_expression));
-            if (res) {
-                return res;
-            }
-            res = pop_operation_stack(copy_expression);
+            int res = operation_stack_push_back(operands, oper);
+            printf("value = %f\n", oper.value);
             if (res) {
                 return res;
             }
@@ -211,56 +212,50 @@ int calc_exp_postfix(const operation_stack * expression, double var, double* exp
         }
         case operator: {
             double right_operand = top_operation_stack(operands)->value;
+            printf("operator = %c\n", oper.operation);
+            printf("right operand = %lf ", right_operand);
             int res = pop_operation_stack(operands);
             if (res) {
                 return res;
             }
             double left_operand = top_operation_stack(operands)->value;
+            printf("left operand = %lf\n", left_operand);
             res = pop_operation_stack(operands);
             if (res) {
                 return res;
             }
-            OPERATORS operation = top_operation_stack(copy_expression)->operation;
+            OPERATORS operation = oper.operation;
             double result = operator_func(left_operand, right_operand, operation);
             operation_node tmp = {.type = value, .value = result};
             res = operation_stack_push_back(operands, tmp);
             if (res) {
                 return res;
             }
-            res = pop_operation_stack(copy_expression);
-            if (res) {
-                return res;
-            }
             break;
         }
         case function: {
+            printf("function = %c\n", oper.operation);
+            printf("value = %c\n", oper.variable);
             double unar_operand = top_operation_stack(operands)->value;
             int res = pop_operation_stack(operands);
             if (res) {
                 return res;
             }
-            OPERATORS operation = top_operation_stack(copy_expression)->operation;
+            OPERATORS operation = oper.operation;
             double result = math_func(unar_operand, operation);
             operation_node tmp = {.type = value, .value = result};
             res = operation_stack_push_back(operands, tmp);
             if (res) {
                 return res;
             }
-            res = pop_operation_stack(copy_expression);
-            if (res) {
-                return res;
-            }
             break;
         }
         case variable: {
-            operation_node tmp = *top_operation_stack(copy_expression);
+            operation_node tmp = oper;
+            printf("variable = %c\n", oper.variable);
             tmp.type = value;
             tmp.value = var;
             operation_stack_push_back(operands, tmp);
-            int res = pop_operation_stack(copy_expression);
-            if (!res) {
-                return res;
-            }
             break;
         }
         default:
