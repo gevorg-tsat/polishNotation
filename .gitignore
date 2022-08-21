@@ -12,7 +12,8 @@
 *.map
 *.exp
 *.out
-build/*
+build/graph
+
 
 # Precompiled Headers
 *.gch
