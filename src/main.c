@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 int main() {
-    char *str = "15.5hello my friend";
+    char *str = "hello my friend15.5";
     float x;
     // int i = sscanf(str, "%f", &x);
     if (is_number(str)) {

@@ -15,6 +15,7 @@ typedef struct operation_node {
     union {
         OPERATORS operation;
         double value;
+        char variable;
     };
 } operation_node;
 
@@ -34,6 +35,8 @@ int mul_int(int number, int coefficient);
 int div_int(int number, int coefficeint);
 
 operation_stack *init_operation_stack(int init_capacity);
+operation_stack* copy_operation_stack(operation_stack copy);
+operation_node* copy_operation_node_list(operation_stack copy);
 int operation_stack_push_back(operation_stack *op_stack,
                               const operation_node operation);
 
@@ -51,4 +54,23 @@ bool empty_operation_stack(operation_stack *op_stack);
 int pop_operation_stack(operation_stack *op_stack);
 
 void destroy(operation_stack **op_stack);
+void reverse_operation_stack(operation_stack *op_stack);
 #endif  //  SRC_OPERATION_STACK_H_
+
+
+/*
+1_op – ,
+2_op – .
+index
+
+4 4 * x + c
+
+16+x
+
+
+TODO:
+стек для операндов отдельный
+copy_stack
+// индексы для операторов
+//  
+*/

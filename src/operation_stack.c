@@ -30,6 +30,28 @@ operation_stack *init_operation_stack(int init_capacity) {
     return op_stack;
 }
 
+operation_stack* copy_operation_stack(operation_stack copy) {
+    operation_stack* new_operation_stack = (operation_stack*)malloc(sizeof(operation_stack));
+    if (!new_operation_stack) {
+        return NULL;
+    }
+    new_operation_stack->size = copy.size;
+    new_operation_stack->_capacity = copy._capacity;
+    new_operation_stack->operations_list = copy_operation_node_list(copy);
+    if (!new_operation_stack->operations_list) {
+        free(new_operation_stack);
+        return NULL;
+    }
+    return new_operation_stack;
+}
+operation_node* copy_operation_node_list(operation_stack copy) {
+    operation_node* operation_node_list = (operation_node*)malloc(sizeof(operation_node) * copy._capacity);
+    for (int i = 0; i < copy.size; ++i) {
+        operation_node_copy(&operation_node_list[i], copy.operations_list[i]);
+    }
+    return operation_node_list;
+}
+
 int operation_stack_push_back(operation_stack *op_stack,
                               const operation_node operation) {
     if (!op_stack) {
@@ -74,9 +96,26 @@ int shrink_operation_stack(operation_stack *op_stack) {
 }
 
 int operation_node_copy(operation_node *operation, const operation_node copy) {
-    operation->operation = copy.operation;
     operation->type      = copy.type;
-    operation->value     = copy.value;
+    switch (operation->type) {
+    case value: {
+        operation->value     = copy.value;
+        break;
+    }
+    case operator: {
+    }
+    case function: {
+        operation->operation = copy.operation;
+        break;
+    }
+    case variable: {
+        operation->variable = copy.variable;
+        break;
+    }
+    default:
+        break;
+    }
+
     return success;
 }
 
@@ -108,4 +147,13 @@ void destroy(operation_stack **op_stack) {
     free((*op_stack)->operations_list);
     free(*op_stack);
     *op_stack = NULL;
+}
+
+void reverse_operation_stack(operation_stack *op_stack) {
+    for (int i = 0; i < op_stack->size / 2; ++i) {
+        operation_node tmp;
+        operation_node_copy(&tmp, op_stack->operations_list[i]);
+        operation_node_copy(&op_stack->operations_list[i], op_stack->operations_list[op_stack->size - 1 - i]);
+        operation_node_copy(&op_stack->operations_list[op_stack->size - 1 - i], tmp);
+    }
 }
