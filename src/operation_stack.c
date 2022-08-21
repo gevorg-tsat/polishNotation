@@ -75,6 +75,8 @@ int shrink_operation_stack(operation_stack *op_stack) {
 
 int operation_node_copy(operation_node *operation, const operation_node copy) {
     operation->operation = copy.operation;
+    operation->type      = copy.type;
+    operation->value     = copy.value;
     return success;
 }
 

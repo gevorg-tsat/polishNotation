@@ -24,9 +24,13 @@ typedef enum OPERATORS {
     number  = 'n',
 } OPERATORS;
 
-int calc_expr_postfix(char *expression, double *result);
+int calc_expr_postfix(char *expression, double *result, double x);
 
-bool is_number(char *expression);
+bool is_number(char *current_pos);
+bool is_function(char *current_pos);
+bool is_operator(char *current_pos);
+bool is_space(char *current_pos);
+bool is_eof(char *current_pos);
 
 
 #endif  //  SRC_CALC_H_

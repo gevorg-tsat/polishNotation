@@ -2,9 +2,19 @@
 #define SRC_OPERATION_STACK_H_
 #include "calc.h"
 
+typedef enum operation_type {
+    value = 1,
+    operator= 2,
+    function = 3,
+} operation_type;
+
 typedef struct operation_node {
-    OPERATORS operation;
-    double value;
+    operation_type type;
+    union {
+        OPERATORS operation;
+        double value;
+    };
+
 } operation_node;
 
 
