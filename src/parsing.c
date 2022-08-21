@@ -7,11 +7,11 @@ int prior(char *str) {
 }
 
 void spaces_fix(char *str) {
-    char *str_space = strchr(str, ' ');
+    char *str_space = strstr(str, " ");
     while (str_space != NULL) {
         for (int i = 0; str_space[i] != '\0'; i++)
             str_space[i] = str_space[i + 1];
-        str_space = strchr(str, ' ');
+        str_space = strstr(str, " ");
     }
 }
 
@@ -139,8 +139,7 @@ char* str_to_polish(char *str) {
                 root = pop(root);
             }
             root = pop(root);
-            if (root && (root->data == 'c' || root->data == 's' || root->data == 'q' || root->data == 'g'
-                || root->data == 'l' || root->data == 't')) {
+            if (root && (root -> prior == 3)) {
                 polish[n++] = ' ';
                 polish[n++] = root -> data;
                 root = pop(root);
@@ -153,8 +152,8 @@ char* str_to_polish(char *str) {
         polish[n++] = root -> data;
         root = pop(root);
     }
-    printf("%s", polish);
     polish[n++] = '\0';
+    return polish;
 }
 
 struct node* stacking(struct node* root, int prior, char c, char *polish, int *n) {
