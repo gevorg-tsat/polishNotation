@@ -20,7 +20,7 @@ check:
 
 build: $(BUILD_DIR)/$(CALCULATE:.c=)
 
-CFLAGS+= -Werror -Wextra -Wall -Wimplicit -Wpedantic
+#CFLAGS+= -Werror -Wextra -Wall -Wimplicit -Wpedantic
 
 
 $(BUILD_DIR)/$(CALCULATE:.c=): $(SRCS:.c=.o) main.o | $(BUILD_DIR) $(CALCULATE_HEADER)

@@ -71,7 +71,7 @@ int operation_stack_push_back(operation_stack *op_stack,
     }
     if (op_stack->_capacity == op_stack->size) {
         int res = grow_operation_stack(op_stack);
-        if (!res) {
+        if (res) {
             return res;
         }
     }

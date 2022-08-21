@@ -12,51 +12,70 @@ operation_stack *stack_from_expression(char *expression) {
     }
     operation_stack *stack = init_operation_stack(INIT_CAPACITY);
     while (*expression) {
-        while (is_space(expression)) {
-            ++expression;
-        }
         if (is_eof(expression)) {
             break;
         }
+        // while (is_space(expression) && !is_eof(expression)) {
+        //     ++expression;
+        // }
         if (is_x(expression)) {
             operation_node new_node = {.type = variable, .variable = 'x'};
             int res = operation_stack_push_back(stack, new_node);
-            if (!res) {
+            if (res) {
                 return NULL;
             }
-            expression = strchr(expression, ' ');
+            char* tmp = strchr(expression, ' ');
+            if (!tmp) {
+                return stack;
+            }
+            expression = tmp;
         }
         if (is_number(expression)) {
             double number = 0;
             sscanf(expression, "%lf", &number);
             operation_node new_node = {.value = number, .type = value};
             int res = operation_stack_push_back(stack, new_node);
-            if (!res) {
+            if (res) {
                 return NULL;
             }
-            expression = strchr(expression, ' ');
+            char* tmp = strchr(expression, ' ');
+            if (!tmp) {
+                return stack;
+            }
+            expression = tmp;
         }
         if (is_function(expression)) {
             char func = '\0';
             sscanf(expression, "%c", &func);
             operation_node new_node = {.type = function, .operation = func};
             int res = operation_stack_push_back(stack, new_node);
-            if (!res) {
+            if (res) {
                 return NULL;
             }
-            expression = strchr(expression, ' ');
+            char* tmp = strchr(expression, ' ');
+            if (!tmp) {
+                return stack;
+            }
+            expression = tmp;
         }
         if (is_operator(expression)) {
             char oper = '\0';
             sscanf(expression, "%c", &oper);
             operation_node new_node = {.type = operator, .operation = oper };
             int res = operation_stack_push_back(stack, new_node);
-            if (!res) {
+            if (res) {
                 return NULL;
             }
-            expression = strchr(expression, ' ');
+            char* tmp = strchr(expression, ' ');
+            if (!tmp) {
+                return stack;
+            }
+            expression = tmp;
         }
-        ++expression;
+        // if (expression+1) {
+            ++expression;
+        // }
+        
     }
     return stack;
 }
@@ -181,11 +200,11 @@ int calc_exp_postfix(const operation_stack * expression, double var, double* exp
         switch (top_operation_stack(copy_expression)->type) {
         case value: {
             int res = operation_stack_push_back(operands, *top_operation_stack(copy_expression));
-            if (!res) {
+            if (res) {
                 return res;
             }
             res = pop_operation_stack(copy_expression);
-            if (!res) {
+            if (res) {
                 return res;
             }
             break;
@@ -193,23 +212,23 @@ int calc_exp_postfix(const operation_stack * expression, double var, double* exp
         case operator: {
             double right_operand = top_operation_stack(operands)->value;
             int res = pop_operation_stack(operands);
-            if (!res) {
+            if (res) {
                 return res;
             }
             double left_operand = top_operation_stack(operands)->value;
             res = pop_operation_stack(operands);
-            if (!res) {
+            if (res) {
                 return res;
             }
             OPERATORS operation = top_operation_stack(copy_expression)->operation;
             double result = operator_func(left_operand, right_operand, operation);
             operation_node tmp = {.type = value, .value = result};
             res = operation_stack_push_back(operands, tmp);
-            if (!res) {
+            if (res) {
                 return res;
             }
             res = pop_operation_stack(copy_expression);
-            if (!res) {
+            if (res) {
                 return res;
             }
             break;
@@ -217,18 +236,18 @@ int calc_exp_postfix(const operation_stack * expression, double var, double* exp
         case function: {
             double unar_operand = top_operation_stack(operands)->value;
             int res = pop_operation_stack(operands);
-            if (!res) {
+            if (res) {
                 return res;
             }
             OPERATORS operation = top_operation_stack(copy_expression)->operation;
             double result = math_func(unar_operand, operation);
             operation_node tmp = {.type = value, .value = result};
             res = operation_stack_push_back(operands, tmp);
-            if (!res) {
+            if (res) {
                 return res;
             }
             res = pop_operation_stack(copy_expression);
-            if (!res) {
+            if (res) {
                 return res;
             }
             break;
