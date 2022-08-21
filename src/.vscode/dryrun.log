@@ -1,0 +1,5 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory `/Users/hasbulatabdullin/Downloads/code/21School/project3/P03D20-0/src'
+python3 ../materials/linters/cpplint.py --extensions=c calc.c calc.h
+make: Leaving directory `/Users/hasbulatabdullin/Downloads/code/21School/project3/P03D20-0/src'
+ 
