@@ -34,21 +34,6 @@ int sign_check(char* str, int n, int biflag) {
     int flag = 0;
     char* symb = "*/+-";
     char* nums = "1234567890";
-    if (str[0] == '-') {
-        for (int j = n; j > 0; j--){
-            str[j] = str[j - 1];
-        }
-        n++;
-        str[0] = '0';
-    }
-    for (int i = 1; i < n; i++) {
-        if (str[i] == '-' && str[i - 1] == '(') {
-            for (int j = n + 1; j > i; j--)
-                str[j] = str[j - 1];
-            str[i] = '0';
-            n++;    
-        }
-    }
     for (int i = 0; i < n; i++) {
         if (!flag) {
             if (str[i] == 'c' && ((str + i) == strstr((str + i), "ctg(") || (str + i) == strstr((str + i), "cos("))) {
@@ -66,7 +51,8 @@ int sign_check(char* str, int n, int biflag) {
             } else if ((str[i] == ')' && !biflag) 
             || (strchr(nums, str[i]) != NULL && str[i + 1] != '(' && str[i - 1] != ')')
             || (str[i] == '.' && strchr(nums, str[i + 1]) != NULL)) {
-            } else if (str[i] == 'x' && strchr(nums, str[i + 1]) == NULL && strchr(nums, str[i - 1]) == NULL && str[i + 1] != '(' && str[i - 1] != ')') {
+            } else if (str[i] == 'x' && (i == 0 || i == n - 1)) {} 
+              else if (str[i] == 'x' && strchr(nums, str[i + 1]) == NULL && strchr(nums, str[i - 1]) == NULL && str[i + 1] != '(' && str[i - 1] != ')') {
             } else {
                 flag = 1;
                 break;
@@ -153,6 +139,7 @@ char* str_to_polish(char *str) {
         root = pop(root);
     }
     polish[n++] = '\0';
+    
     return polish;
 }
 
@@ -164,7 +151,7 @@ struct node* stacking(struct node* root, int prior, char c, char *polish, int *n
         struct node *tmp = root;
         if (c != '(') {
             while ((tmp->next) && (tmp->next->data != '(')) {
-                if (tmp->next->prior > prior) {
+                if (tmp->next->prior >= prior) {
                     polish[(*n)++] = ' ';
                     polish[(*n)++] = tmp->next->data;
                     tmp->next = pop(tmp->next);
@@ -174,5 +161,70 @@ struct node* stacking(struct node* root, int prior, char c, char *polish, int *n
         }
     }
     return root;
+}
+
+void unar_nul(char* str, int n) {
+    if (str[0] == '-') {
+        for (int j = n; j > 0; j--){
+            str[j] = str[j - 1];
+        }
+        n++;
+        str[0] = '0';
+        str[n] = '\0';
+    }
+    for (int i = 1; i < n; i++) {
+        if (str[i] == '-' && str[i - 1] == '(') {
+            for (int j = n + 1; j > i; j--)
+                str[j] = str[j - 1];
+            str[i] = '0';
+            n++;    
+        }
+    }
+}
+
+int first_last_sym(char* str, int n) {
+    int flag = 0;
+    char numbers[11] = "1234567890";
+    if (str[0] == '+' || str[0] == '/' || str[0] == '*' || str[0] == '.')
+        flag = 1;
+    if (str[n-1] == '+' || str[n-1] == '/' || str[n-1] == '*' || str[n-1] == '-')
+        flag = 1;
+    if (str[0] == 'x' && (strchr(numbers, str[1]) != NULL || str[1] == '('))
+        flag = 1;
+    if (str[n - 1] == 'x' && (strchr(numbers, str[n - 1]) != NULL || str[n - 1] == ')'))
+        flag = 1;
+    return flag;
+}
+
+
+int operator_check(char* str, int n, int flag_next) {
+    int flag = 1;
+    char numbers[11] = "1234567890";
+    if (str[0] == '+') flag = 0;
+    for (int i = 0; i < n && flag;i++) {
+        if (str[i] == 's' && (str + i == strstr(str + i, "sqrt(")))
+            i = i + 3;
+        else if (str[i] == 's' && (str + i == strstr(str + i, "sin(")))
+            i = i + 2;
+        else if (str[i] == 'c' && (str + i == strstr(str + i, "cos(")))
+            i = i + 2;
+        else if (str[i] == 'c' && (str + i == strstr(str + i, "ctg(")))
+            i = i + 2;
+        else if (str[i] == 't' && (str + i == strstr(str + i, "tan(")))
+            i = i + 2;
+        else if (str[i] == 'l' && (str + i == strstr(str + i, "ln(")))
+            i = i + 1;
+        else if ((strchr("+*/-", str[i]) != NULL && flag_next) || (str[i] == '(')) {
+            flag = operator_check(str+i+1,1,0);
+        }
+        else if ((str[i]==')' && flag_next) || (strchr(numbers, str[i]) != NULL) || (str[i] == '.' && ((str[i-1]>=48 && str[i-1]<=57) && (str[i+1]>=48 && str[i+1]<=57))))
+        {}
+        else if (str[i] == 'x' && (i == 0 || i == n - 1))
+        {}
+        else if (str[i] == 'x' && strchr(numbers, str[i + 1]) == NULL && strchr(numbers, str[i - 1]) == NULL && str[i + 1] != '(' && str[i - 1] != ')')
+        {}
+        else flag = 0;
+    }
+    return flag;
 }
 
