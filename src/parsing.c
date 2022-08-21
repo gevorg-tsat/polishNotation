@@ -153,6 +153,7 @@ char* str_to_polish(char *str) {
         root = pop(root);
     }
     polish[n++] = '\0';
+    
     return polish;
 }
 
