@@ -30,7 +30,7 @@ operation_stack *init_operation_stack(int init_capacity) {
     return op_stack;
 }
 
-operation_stack* copy_operation_stack(operation_stack copy) {
+operation_stack* copy_operation_stack(const operation_stack copy) {
     operation_stack* new_operation_stack = (operation_stack*)malloc(sizeof(operation_stack));
     if (!new_operation_stack) {
         return NULL;
@@ -44,7 +44,7 @@ operation_stack* copy_operation_stack(operation_stack copy) {
     }
     return new_operation_stack;
 }
-operation_node* copy_operation_node_list(operation_stack copy) {
+operation_node* copy_operation_node_list(const operation_stack copy) {
     operation_node* operation_node_list = (operation_node*)malloc(sizeof(operation_node) * copy._capacity);
     for (int i = 0; i < copy.size; ++i) {
         operation_node_copy(&operation_node_list[i], copy.operations_list[i]);
@@ -71,7 +71,7 @@ int operation_stack_push_back(operation_stack *op_stack,
                                operation);
 }
 
-int reallocate_peration_stack(operation_stack *op_stack, int coefficient,
+int reallocate_operation_stack(operation_stack *op_stack, int coefficient,
                               func fun) {
     if (op_stack->_capacity == 0) {
         op_stack->_capacity = 1;
@@ -88,11 +88,11 @@ int reallocate_peration_stack(operation_stack *op_stack, int coefficient,
 }
 
 int grow_operation_stack(operation_stack *op_stack) {
-    return reallocate_peration_stack(op_stack, 2, mul_int);
+    return reallocate_operation_stack(op_stack, 2, mul_int);
 }
 
 int shrink_operation_stack(operation_stack *op_stack) {
-    return reallocate_peration_stack(op_stack, 2, div_int);
+    return reallocate_operation_stack(op_stack, 2, div_int);
 }
 
 int operation_node_copy(operation_node *operation, const operation_node copy) {
