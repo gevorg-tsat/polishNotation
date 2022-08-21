@@ -194,6 +194,14 @@ int calc_exp_postfix(const operation_stack * expression, double var, double* exp
     operation_stack* copy_expression = copy_operation_stack(*expression);
     operation_stack* operands = init_operation_stack(INIT_CAPACITY);
     reverse_operation_stack(copy_expression);
+    // for (int i = 0; i < copy_expression->size; ++i) {
+    //     printf("%d %c", copy_expression->operations_list[i].type, (char)copy_expression->operations_list[i].value);
+    // }
+    // printf("\n");
+    // for (int i = 0; i < 5; ++i) {
+    //     printf("%d \n", top_operation_stack(copy_expression)->type);
+    //     pop_operation_stack(copy_expression);
+    // }
     while (empty_operation_stack(copy_expression)) {
         operation_node oper = *top_operation_stack(copy_expression);
         printf("type = %d\n", oper.type);
@@ -202,9 +210,15 @@ int calc_exp_postfix(const operation_stack * expression, double var, double* exp
             return res;
         }
         switch (oper.type) {
+        case variable: {
+            operation_node tmp = {.value = var, .type = value};
+            printf("variable = %c\n", oper.variable);
+            operation_stack_push_back(operands, tmp);
+            break;
+        }
         case value: {
             int res = operation_stack_push_back(operands, oper);
-            printf("value = %f\n", oper.value);
+            printf("value = %f\n,", oper.value);
             if (res) {
                 return res;
             }
@@ -250,21 +264,13 @@ int calc_exp_postfix(const operation_stack * expression, double var, double* exp
             }
             break;
         }
-        case variable: {
-            operation_node tmp = oper;
-            printf("variable = %c\n", oper.variable);
-            tmp.type = value;
-            tmp.value = var;
-            operation_stack_push_back(operands, tmp);
-            break;
-        }
         default:
             break;
         }
     }
     *expression_result = top_operation_stack(operands)->value;
-    destroy(&operands);
-    destroy(&copy_expression);
+    destroy_operation_stack(&operands);
+    destroy_operation_stack(&copy_expression);
     return success;
 }
 /*

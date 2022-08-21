@@ -1,10 +1,5 @@
 #include "parsing.h"
 
-int prior(char *str) {
-    if (strcmp(str, ")") == 0 || strcmp(str, "(") == 0)
-        return -1;
-    
-}
 
 void spaces_fix(char *str) {
     char *str_space = strstr(str, " ");
@@ -139,7 +134,8 @@ char* str_to_polish(char *str) {
         root = pop(root);
     }
     polish[n++] = '\0';
-    
+    for (int i = 0; polish[i] != '\0'; i++)
+        polish[i] = polish[i+1];
     return polish;
 }
 

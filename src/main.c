@@ -1,5 +1,7 @@
 #include "parsing.h"
 #include <stdio.h>
+#include "calc.h"
+#include "operation_stack.h"
 
 int main() {
     char *str_temp;
@@ -29,13 +31,17 @@ int main() {
         return 1;
     }
     if (operator_check(str, strlen(str), 1) == 0) {
-        printf("andrey error");
-    }
-    if (sign_check(str, strlen(str), 0)) {
-        printf("artem error");
+        printf("syntax error");
         return 1;
     }
     str = str_to_polish(str);
-    printf("%s", str);
+    printf("%s\n", str);
+    operation_stack* stack = stack_from_expression(str);
+    double exp_result;
+    int res = calc_exp_postfix(stack, -1, &exp_result);
+    if (res) {
+        return -1;
+    }
+    printf("\n%lf\n", exp_result);
     return 0;
 }

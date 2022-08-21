@@ -159,7 +159,7 @@ int pop_operation_stack(operation_stack *op_stack) {
 }
 
 // деструктор стека
-void destroy(operation_stack **op_stack) {
+void destroy_operation_stack(operation_stack **op_stack) {
     free((*op_stack)->operations_list);
     free(*op_stack);
     *op_stack = NULL;

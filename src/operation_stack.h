@@ -53,7 +53,7 @@ bool empty_operation_stack(operation_stack *op_stack);
 
 int pop_operation_stack(operation_stack *op_stack);
 
-void destroy(operation_stack **op_stack);
+void destroy_operation_stack(operation_stack **op_stack);
 void reverse_operation_stack(operation_stack *op_stack);
 #endif  //  SRC_OPERATION_STACK_H_
 
