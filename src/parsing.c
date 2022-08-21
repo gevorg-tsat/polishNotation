@@ -158,18 +158,18 @@ char* str_to_polish(char *str) {
 }
 
 struct node* stacking(struct node* root, int prior, char c, char *polish, int *n) {
+    while ((root) && (root -> data != '(')) {
+        if (root -> prior > prior) {
+            polish[(*n)++] = ' ';
+            polish[(*n)++] = root -> data;
+            root = pop(root);
+        }
+    }
     if (root == NULL) {
         root = init(prior, c);
     } else {
         root = push(root, c, prior);
-        struct node *tmp = root;
-        while ((tmp -> next) && (tmp -> next -> data != '(')) {
-            if (tmp -> next -> prior > prior) {
-                polish[(*n)++] = ' ';
-                polish[(*n)++] = tmp -> next -> data;
-                tmp -> next = pop(tmp -> next);
-            }
-        }
+        
     }
     return root;
 }
