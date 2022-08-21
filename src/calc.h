@@ -28,7 +28,7 @@ typedef enum OPERATORS {
 #define OPERATION_TYPE
 typedef enum operation_type {
     value = 1,
-    operator= 2,
+    operator = 2,
     function = 3,
     variable = 4,
 } operation_type;

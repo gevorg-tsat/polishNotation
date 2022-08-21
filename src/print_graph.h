@@ -13,6 +13,6 @@
 
 
 void fill_array(double* array, char* expression);
-void print_graph(double* data);
+void print_graph(const double* data);
 
 #endif  // SRC_PRINT_GRAPH_H_

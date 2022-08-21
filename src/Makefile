@@ -9,7 +9,7 @@ BUILD_DIR=build_dir
 
 SRCS=$(CALCULATE) $(OPERATION_STACK) parsing.c stack.c print_graph.c
 
-FILES=$(CALCULATE) $(CALCULATE_HEADER)  $(OPERATION_STACK) $(OPERATION_STACK_HEADER) parsing.c stack.c print_graph.c main.c graph.h parsing.h print_graph.h stack.h
+FILES=$(CALCULATE) $(CALCULATE_HEADER)  $(OPERATION_STACK) $(OPERATION_STACK_HEADER) parsing.c stack.c print_graph.c main.c parsing.h print_graph.h stack.h
 
 
 check:

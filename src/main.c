@@ -5,22 +5,29 @@
 #include "print_graph.h"
 
 int main() {
-    char *str_temp;
+    char *str;
     int n = 0;
-    str_temp = malloc(sizeof(char));
+    str = malloc(sizeof(char));
     int flag = 1;
     while (flag) {
         n++;
-        str_temp = realloc(str_temp, n*sizeof(char));
-        scanf("%c", &str_temp[n-1]);
-        if (str_temp[n-1] == '\n') {
-        str_temp[n-1] = '\0';
+        char *temp = realloc(str, n*sizeof(char));
+        if (!temp) {
+            return 1;
+        }
+        str = temp;
+        scanf("%c", &str[n-1]);
+        if (str[n-1] == '\n') {
+        str[n-1] = '\0';
         flag = 0;
         }
     }
-    str_temp = realloc(str_temp, 2*n*sizeof(char));
-    spaces_fix(str_temp);
-    char *str = str_temp;
+    char *temp = realloc(str, 2*n*sizeof(char));
+    if (!temp) {
+            return 1;
+        }
+    str = temp;
+    spaces_fix(str);
     if (brackets(str)) {
         printf("brackets error");
         return 1;
@@ -37,7 +44,6 @@ int main() {
     }
     str = str_to_polish(str);
     printf("%s\n", str);
-    double exp_result;
     double* array = (double*)malloc(sizeof(double) * LENGTH);
     fill_array(array, str);
 

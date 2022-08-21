@@ -76,8 +76,7 @@ operation_stack *stack_from_expression(char *expression) {
             expression = tmp;
             continue;
         }
-            //++expression;
-        
+            // ++expression;
     }
     return stack;
 }
@@ -198,14 +197,6 @@ int calc_exp_postfix(const operation_stack * expression, double var, double* exp
     operation_stack* copy_expression = copy_operation_stack(*expression);
     operation_stack* operands = init_operation_stack(INIT_CAPACITY);
     reverse_operation_stack(copy_expression);
-    // for (int i = 0; i < copy_expression->size; ++i) {
-    //     printf("%d %c", copy_expression->operations_list[i].type, (char)copy_expression->operations_list[i].value);
-    // }
-    // printf("\n");
-    // for (int i = 0; i < 5; ++i) {
-    //     printf("%d \n", top_operation_stack(copy_expression)->type);
-    //     pop_operation_stack(copy_expression);
-    // }
     while (empty_operation_stack(copy_expression)) {
         operation_node oper = *top_operation_stack(copy_expression);
         // printf("type = %d\n", oper.type);
@@ -282,24 +273,4 @@ int calc_exp_postfix(const operation_stack * expression, double var, double* exp
     operator= 2,
     function = 3,
     variable = 4,
-*/
-
-/*
-1_op – ,
-2_op – .
-index
-
-cos(4 + 5 / x)
-
-
-4 5 x / + c
-
-16+x
-
-
-TODO:
-стек для операндов отдельный
-copy_stack
-// индексы для операторов
-//  
 */

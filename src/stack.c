@@ -25,11 +25,3 @@ struct node* pop(struct node *root) {
     free(tmp);
     return root;
 }
-
-void destroy(struct node *root) {
-    while (root != 0) {
-        struct node *tmp = (root) -> next;
-        free(root);
-        root = tmp;
-    }
-}
