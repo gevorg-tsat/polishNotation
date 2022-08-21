@@ -5,17 +5,17 @@
 #include <string.h>
 #define INIT_CAPACITY 1
 
-int calc_expr_postfix(char *expression, double *result, double x) {
+operation_stack *stack_from_expression(char *expression) {
     if (!expression) {
-        return null_data_error;
-    }
-    if (!result) {
-        return result_pointer_error;
+        return NULL;
     }
     operation_stack *stack = init_operation_stack(INIT_CAPACITY);
     while (*expression) {
         while (is_space(expression)) {
             ++expression;
+        }
+        if (is_eof(expression)) {
+            break;
         }
         if (is_number(expression)) {
             double number = 0;
@@ -23,7 +23,7 @@ int calc_expr_postfix(char *expression, double *result, double x) {
             operation_node new_node = {.value = number, .type = value};
             int res = operation_stack_push_back(stack, new_node);
             if (!res) {
-                return res;
+                return NULL;
             }
             expression = strchr(expression, ' ');
         }
@@ -33,7 +33,7 @@ int calc_expr_postfix(char *expression, double *result, double x) {
             operation_node new_node = {.type = function, .operation = func};
             int res = operation_stack_push_back(stack, new_node);
             if (!res) {
-                return res;
+                return NULL;
             }
             expression = strchr(expression, ' ');
         }
@@ -43,7 +43,7 @@ int calc_expr_postfix(char *expression, double *result, double x) {
             operation_node new_node = {.type = operator, .operation = oper };
             int res = operation_stack_push_back(stack, new_node);
             if (!res) {
-                return res;
+                return NULL;
             }
             expression = strchr(expression, ' ');
         }
@@ -51,15 +51,15 @@ int calc_expr_postfix(char *expression, double *result, double x) {
     }
 
 
-    return success;
+    return stack;
 }
 
-bool is_number(char *current_pos) {
+bool is_number(const char *current_pos) {
     double x;
     return sscanf(current_pos, "%lf", &x);
 }
 
-bool is_function(char *current_pos) {
+bool is_function(const char *current_pos) {
     char x;
     sscanf(current_pos, "%c", &x);
     char *functions = "sctgqln";
@@ -69,7 +69,7 @@ bool is_function(char *current_pos) {
     return false;
 }
 
-bool is_operator(char *current_pos) {
+bool is_operator(const char *current_pos) {
     char x;
     sscanf(current_pos, "%c", &x);
     char *functions = "*/+-";
@@ -79,7 +79,7 @@ bool is_operator(char *current_pos) {
     return false;
 }
 
-bool is_space(char *current_pos) {
+bool is_space(const char *current_pos) {
     char x;
     sscanf(current_pos, "%c", &x);
     if (x == ' ') {
@@ -87,7 +87,7 @@ bool is_space(char *current_pos) {
     }
     return false;
 }
-bool is_eof(char *current_pos) {
+bool is_eof(const char *current_pos) {
     char x;
     int check = sscanf(current_pos, "%c", &x);
     if (check == EOF) {

@@ -24,13 +24,40 @@ typedef enum OPERATORS {
     number  = 'n',
 } OPERATORS;
 
-int calc_expr_postfix(char *expression, double *result, double x);
+#ifndef OPERATION_TYPE
+#define OPERATION_TYPE
+typedef enum operation_type {
+    value = 1,
+    operator= 2,
+    function = 3,
+} operation_type;
 
-bool is_number(char *current_pos);
-bool is_function(char *current_pos);
-bool is_operator(char *current_pos);
-bool is_space(char *current_pos);
-bool is_eof(char *current_pos);
+typedef struct operation_node {
+    operation_type type;
+    union {
+        OPERATORS operation;
+        double value;
+    };
+
+} operation_node;
+
+typedef struct operation_stack {
+    operation_node *operations_list;
+    int _capacity;
+    int size;
+} operation_stack;
+
+
+#endif  //  OPERATION_TYPE
+
+operation_stack *stack_from_expression(char *expression);
+
+bool is_number(const char *current_pos);
+bool is_x(const char *current_pos);
+bool is_function(const char *current_pos);
+bool is_operator(const char *current_pos);
+bool is_space(const char *current_pos);
+bool is_eof(const char *current_pos);
 
 
 #endif  //  SRC_CALC_H_
