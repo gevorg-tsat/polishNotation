@@ -24,7 +24,7 @@ operation_stack *stack_from_expression(char *expression) {
             if (res) {
                 return NULL;
             }
-            char* tmp = strchr(expression, ' ');
+            char *tmp = strchr(expression, ' ');
             if (!tmp) {
                 return stack;
             }
@@ -39,7 +39,7 @@ operation_stack *stack_from_expression(char *expression) {
             if (res) {
                 return NULL;
             }
-            char* tmp = strchr(expression, ' ');
+            char *tmp = strchr(expression, ' ');
             if (!tmp) {
                 return stack;
             }
@@ -54,7 +54,7 @@ operation_stack *stack_from_expression(char *expression) {
             if (res) {
                 return NULL;
             }
-            char* tmp = strchr(expression, ' ');
+            char *tmp = strchr(expression, ' ');
             if (!tmp) {
                 return stack;
             }
@@ -64,19 +64,19 @@ operation_stack *stack_from_expression(char *expression) {
         if (is_operator(expression)) {
             char oper = '\0';
             sscanf(expression, "%c", &oper);
-            operation_node new_node = {.type = operator, .operation = oper };
+            operation_node new_node = {.type = _operator, .operation = oper};
             int res = operation_stack_push_back(stack, new_node);
             if (res) {
                 return NULL;
             }
-            char* tmp = strchr(expression, ' ');
+            char *tmp = strchr(expression, ' ');
             if (!tmp) {
                 return stack;
             }
             expression = tmp;
             continue;
         }
-            // ++expression;
+        // ++expression;
     }
     return stack;
 }
@@ -140,23 +140,24 @@ bool is_eof(const char *current_pos) {
 }
 
 // вычисление результата бинарного оператора
-double operator_func(double left_operand, double right_operand, OPERATORS operation) {
+double operator_func(double left_operand, double right_operand,
+                     OPERATORS operation) {
     switch (operation) {
-        case '+': {
-            return left_operand + right_operand;
-        }
-        case '-': {
-            return left_operand - right_operand;
-        }
-        case '*': {
-            return left_operand * right_operand;
-        }
-        case '/': {
-            return left_operand / right_operand;
-        }
-        default: {
-            break;
-        }
+    case '+': {
+        return left_operand + right_operand;
+    }
+    case '-': {
+        return left_operand - right_operand;
+    }
+    case '*': {
+        return left_operand * right_operand;
+    }
+    case '/': {
+        return left_operand / right_operand;
+    }
+    default: {
+        break;
+    }
     }
     return 0;
 }
@@ -190,12 +191,13 @@ double math_func(double unar_operand, OPERATORS operation) {
 }
 
 // вычисление выражения по постфиксной нотации, помещенной в стек
-int calc_exp_postfix(const operation_stack * expression, double var, double* expression_result) {
+int calc_exp_postfix(const operation_stack *expression, double var,
+                     double *expression_result) {
     if (!expression) {
         return null_data_error;
     }
-    operation_stack* copy_expression = copy_operation_stack(*expression);
-    operation_stack* operands = init_operation_stack(INIT_CAPACITY);
+    operation_stack *copy_expression = copy_operation_stack(*expression);
+    operation_stack *operands        = init_operation_stack(INIT_CAPACITY);
     reverse_operation_stack(copy_expression);
     while (empty_operation_stack(copy_expression)) {
         operation_node oper = *top_operation_stack(copy_expression);
@@ -212,33 +214,34 @@ int calc_exp_postfix(const operation_stack * expression, double var, double* exp
             break;
         }
         case value: {
-            int res = operation_stack_push_back(operands, oper);
+            int f_res = operation_stack_push_back(operands, oper);
             // printf("value = %f\n,", oper.value);
-            if (res) {
-                return res;
+            if (f_res) {
+                return f_res;
             }
             break;
         }
-        case operator: {
+        case _operator: {
             double right_operand = top_operation_stack(operands)->value;
-            // printf("operator = %c\n", oper.operation);
+            // printf("_operator = %c\n", oper.operation);
             // printf("right operand = %lf ", right_operand);
-            int res = pop_operation_stack(operands);
-            if (res) {
-                return res;
+            int f_res = pop_operation_stack(operands);
+            if (f_res) {
+                return f_res;
             }
             double left_operand = top_operation_stack(operands)->value;
             // printf("left operand = %lf\n", left_operand);
-            res = pop_operation_stack(operands);
-            if (res) {
-                return res;
+            f_res = pop_operation_stack(operands);
+            if (f_res) {
+                return f_res;
             }
             OPERATORS operation = oper.operation;
-            double result = operator_func(left_operand, right_operand, operation);
+            double result
+                = operator_func(left_operand, right_operand, operation);
             operation_node tmp = {.type = value, .value = result};
-            res = operation_stack_push_back(operands, tmp);
-            if (res) {
-                return res;
+            f_res              = operation_stack_push_back(operands, tmp);
+            if (f_res) {
+                return f_res;
             }
             break;
         }
@@ -246,14 +249,14 @@ int calc_exp_postfix(const operation_stack * expression, double var, double* exp
             // printf("function = %c\n", oper.operation);
             // printf("value = %c\n", oper.variable);
             double unar_operand = top_operation_stack(operands)->value;
-            int res = pop_operation_stack(operands);
-            if (res) {
-                return res;
+            int f_res           = pop_operation_stack(operands);
+            if (f_res) {
+                return f_res;
             }
             OPERATORS operation = oper.operation;
-            double result = math_func(unar_operand, operation);
-            operation_node tmp = {.type = value, .value = result};
-            res = operation_stack_push_back(operands, tmp);
+            double result       = math_func(unar_operand, operation);
+            operation_node tmp  = {.type = value, .value = result};
+            res                 = operation_stack_push_back(operands, tmp);
             if (res) {
                 return res;
             }
@@ -270,7 +273,7 @@ int calc_exp_postfix(const operation_stack * expression, double var, double* exp
 }
 /*
     value = 1,
-    operator= 2,
+    _operator= 2,
     function = 3,
     variable = 4,
 */

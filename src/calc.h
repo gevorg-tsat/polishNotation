@@ -27,10 +27,10 @@ typedef enum OPERATORS {
 #ifndef OPERATION_TYPE
 #define OPERATION_TYPE
 typedef enum operation_type {
-    value = 1,
-    operator = 2,
-    function = 3,
-    variable = 4,
+    value     = 1,
+    _operator = 2,
+    function  = 3,
+    variable  = 4,
 } operation_type;
 
 typedef struct operation_node {
@@ -51,13 +51,15 @@ typedef struct operation_stack {
 
 #endif  //  OPERATION_TYPE
 
-double operator_func(double left_operand, double right_operand, OPERATORS operation);
+double operator_func(double left_operand, double right_operand,
+                     OPERATORS operation);
 double math_func(double unar_operand, OPERATORS operation);
 
 
 // typedef int (*func)(int number, int coefficient);
 
-int calc_exp_postfix(const operation_stack * expression, double var, double* expression_result);
+int calc_exp_postfix(const operation_stack *expression, double var,
+                     double *expression_result);
 operation_stack *stack_from_expression(char *expression);
 
 bool is_number(const char *current_pos);

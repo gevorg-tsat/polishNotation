@@ -36,13 +36,14 @@ operation_stack *init_operation_stack(int init_capacity) {
 }
 
 // создание нового стека копированием другого
-operation_stack* copy_operation_stack(const operation_stack copy) {
-    operation_stack* new_operation_stack = (operation_stack*)malloc(sizeof(operation_stack));
+operation_stack *copy_operation_stack(const operation_stack copy) {
+    operation_stack *new_operation_stack
+        = (operation_stack *)malloc(sizeof(operation_stack));
     if (!new_operation_stack) {
         return NULL;
     }
-    new_operation_stack->size = copy.size;
-    new_operation_stack->_capacity = copy._capacity;
+    new_operation_stack->size            = copy.size;
+    new_operation_stack->_capacity       = copy._capacity;
     new_operation_stack->operations_list = copy_operation_node_list(copy);
     if (!new_operation_stack->operations_list) {
         free(new_operation_stack);
@@ -52,10 +53,12 @@ operation_stack* copy_operation_stack(const operation_stack copy) {
 }
 
 // копирование содержимого контейнера стека
-operation_node* copy_operation_node_list(const operation_stack copy) {
-    operation_node* operation_node_list = (operation_node*)malloc(sizeof(operation_node) * copy._capacity);
+operation_node *copy_operation_node_list(const operation_stack copy) {
+    operation_node *operation_node_list
+        = (operation_node *)malloc(sizeof(operation_node) * copy._capacity);
     for (int i = 0; i < copy.size; ++i) {
-        operation_node_copy(&operation_node_list[i], copy.operations_list[i]);
+        operation_node_copy(&operation_node_list[ i ],
+                            copy.operations_list[ i ]);
     }
     return operation_node_list;
 }
@@ -82,7 +85,7 @@ int operation_stack_push_back(operation_stack *op_stack,
 
 // перевыделение памяти контейнера стека
 int reallocate_operation_stack(operation_stack *op_stack, int coefficient,
-                              func fun) {
+                               func fun) {
     if (op_stack->_capacity == 0) {
         op_stack->_capacity = 1;
     }
@@ -108,13 +111,13 @@ int shrink_operation_stack(operation_stack *op_stack) {
 
 // копирование одного узла стека в другой
 int operation_node_copy(operation_node *operation, const operation_node copy) {
-    operation->type      = copy.type;
+    operation->type = copy.type;
     switch (operation->type) {
     case value: {
-        operation->value     = copy.value;
+        operation->value = copy.value;
         break;
     }
-    case operator: {
+    case _operator: {
     }
     case function: {
         operation->operation = copy.operation;
@@ -173,8 +176,11 @@ void destroy_operation_stack(operation_stack **op_stack) {
 void reverse_operation_stack(operation_stack *op_stack) {
     for (int i = 0; i < op_stack->size / 2; ++i) {
         operation_node tmp;
-        operation_node_copy(&tmp, op_stack->operations_list[i]);
-        operation_node_copy(&op_stack->operations_list[i], op_stack->operations_list[op_stack->size - 1 - i]);
-        operation_node_copy(&op_stack->operations_list[op_stack->size - 1 - i], tmp);
+        operation_node_copy(&tmp, op_stack->operations_list[ i ]);
+        operation_node_copy(
+            &op_stack->operations_list[ i ],
+            op_stack->operations_list[ op_stack->size - 1 - i ]);
+        operation_node_copy(
+            &op_stack->operations_list[ op_stack->size - 1 - i ], tmp);
     }
 }
