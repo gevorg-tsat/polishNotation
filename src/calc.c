@@ -5,6 +5,7 @@
 #include <string.h>
 #define INIT_CAPACITY 1
 
+// создание стека из выражения по постфиксной нотации
 operation_stack *stack_from_expression(char *expression) {
     if (!expression) {
         return NULL;
@@ -60,11 +61,13 @@ operation_stack *stack_from_expression(char *expression) {
     return stack;
 }
 
+// проверка следующего элемента в строке на число
 bool is_number(const char *current_pos) {
     double x;
     return sscanf(current_pos, "%lf", &x);
 }
 
+// проверка следующего элемента в строке на переменную Х
 bool is_x(const char *current_pos) {
     char x;
     sscanf(current_pos, "%c", &x);
@@ -74,16 +77,18 @@ bool is_x(const char *current_pos) {
     return false;
 }
 
+// проверка следующего элемента в строке на функцию
 bool is_function(const char *current_pos) {
     char x;
     sscanf(current_pos, "%c", &x);
-    char *functions = "sctgqln";
+    char *functions = "sctgql";
     if (strchr(functions, x)) {
         return true;
     }
     return false;
 }
 
+// проверка следующего элемента в строке на бинарный оператор
 bool is_operator(const char *current_pos) {
     char x;
     sscanf(current_pos, "%c", &x);
@@ -94,6 +99,7 @@ bool is_operator(const char *current_pos) {
     return false;
 }
 
+// проверка следующего элемента в строке на пробел
 bool is_space(const char *current_pos) {
     char x;
     sscanf(current_pos, "%c", &x);
@@ -102,6 +108,8 @@ bool is_space(const char *current_pos) {
     }
     return false;
 }
+
+// проверка строки на конец
 bool is_eof(const char *current_pos) {
     char x;
     int check = sscanf(current_pos, "%c", &x);
@@ -111,6 +119,7 @@ bool is_eof(const char *current_pos) {
     return false;
 }
 
+// вычисление результата бинарного оператора
 double operator_func(double left_operand, double right_operand, OPERATORS operation) {
     switch (operation) {
         case '+': {
@@ -132,6 +141,7 @@ double operator_func(double left_operand, double right_operand, OPERATORS operat
     return 0;
 }
 
+// вычисление результата унарной функции
 double math_func(double unar_operand, OPERATORS operation) {
     switch (operation) {
     case 's': {
@@ -158,11 +168,9 @@ double math_func(double unar_operand, OPERATORS operation) {
     }
     return 0;
 }
-/*
-    ln      = 'l',
-*/
 
-int calc_exp_postfix(const operation_stack * expression, double var) {
+// вычисление выражения по постфиксной нотации, помещенной в стек
+int calc_exp_postfix(const operation_stack * expression, double var, double* expression_result) {
     if (!expression) {
         return null_data_error;
     }
@@ -240,7 +248,9 @@ int calc_exp_postfix(const operation_stack * expression, double var) {
             break;
         }
     }
-
+    *expression_result = top_operation_stack(operands)->value;
+    destroy(&operands);
+    destroy(&copy_expression);
     return success;
 }
 /*

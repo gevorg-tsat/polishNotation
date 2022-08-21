@@ -1,12 +1,17 @@
 #include "operation_stack.h"
 #include <stdlib.h>
 
+// функция умножения целых чисел
 int mul_int(int number, int coefficient) {
     return number * coefficient;
 }
+
+// функция деления целых чисел
 int div_int(int number, int coefficeint) {
     return number / coefficeint;
 }
+
+// конструктор для стека операций и операторов
 operation_stack *init_operation_stack(int init_capacity) {
     operation_stack *op_stack
         = (operation_stack *)malloc(sizeof(operation_stack));
@@ -30,6 +35,7 @@ operation_stack *init_operation_stack(int init_capacity) {
     return op_stack;
 }
 
+// создание нового стека копированием другого
 operation_stack* copy_operation_stack(const operation_stack copy) {
     operation_stack* new_operation_stack = (operation_stack*)malloc(sizeof(operation_stack));
     if (!new_operation_stack) {
@@ -44,6 +50,8 @@ operation_stack* copy_operation_stack(const operation_stack copy) {
     }
     return new_operation_stack;
 }
+
+// копирование содержимого контейнера стека
 operation_node* copy_operation_node_list(const operation_stack copy) {
     operation_node* operation_node_list = (operation_node*)malloc(sizeof(operation_node) * copy._capacity);
     for (int i = 0; i < copy.size; ++i) {
@@ -52,6 +60,7 @@ operation_node* copy_operation_node_list(const operation_stack copy) {
     return operation_node_list;
 }
 
+//  вставка нового элемента в конец стека
 int operation_stack_push_back(operation_stack *op_stack,
                               const operation_node operation) {
     if (!op_stack) {
@@ -71,6 +80,7 @@ int operation_stack_push_back(operation_stack *op_stack,
                                operation);
 }
 
+// перевыделение памяти контейнера стека
 int reallocate_operation_stack(operation_stack *op_stack, int coefficient,
                               func fun) {
     if (op_stack->_capacity == 0) {
@@ -86,15 +96,17 @@ int reallocate_operation_stack(operation_stack *op_stack, int coefficient,
     op_stack->operations_list = temp_buffer;
     return success;
 }
-
+//  удвоение памяти выделенной для контейнера стека
 int grow_operation_stack(operation_stack *op_stack) {
     return reallocate_operation_stack(op_stack, 2, mul_int);
 }
 
+//  уменьшение в два раза памяти выделенной для контейнера стека
 int shrink_operation_stack(operation_stack *op_stack) {
     return reallocate_operation_stack(op_stack, 2, div_int);
 }
 
+// копирование одного узла стека в другой
 int operation_node_copy(operation_node *operation, const operation_node copy) {
     operation->type      = copy.type;
     switch (operation->type) {
@@ -119,6 +131,7 @@ int operation_node_copy(operation_node *operation, const operation_node copy) {
     return success;
 }
 
+// возврат указателя на верхний элемент стека
 operation_node *top_operation_stack(operation_stack *op_stack) {
     if (!op_stack) {
         return NULL;
@@ -126,10 +139,12 @@ operation_node *top_operation_stack(operation_stack *op_stack) {
     return &op_stack->operations_list[ op_stack->size - 1 ];
 }
 
+// провекра стека на пустоту
 bool empty_operation_stack(operation_stack *op_stack) {
     return op_stack->size;
 }
 
+// удаление верхнего элемента стека
 int pop_operation_stack(operation_stack *op_stack) {
     if (op_stack->size == 0) {
         return success;
@@ -143,12 +158,14 @@ int pop_operation_stack(operation_stack *op_stack) {
     return success;
 }
 
+// деструктор стека
 void destroy(operation_stack **op_stack) {
     free((*op_stack)->operations_list);
     free(*op_stack);
     *op_stack = NULL;
 }
 
+// реверс стека по указателю
 void reverse_operation_stack(operation_stack *op_stack) {
     for (int i = 0; i < op_stack->size / 2; ++i) {
         operation_node tmp;
