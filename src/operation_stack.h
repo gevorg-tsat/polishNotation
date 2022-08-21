@@ -16,7 +16,6 @@ typedef struct operation_node {
         OPERATORS operation;
         double value;
     };
-
 } operation_node;
 
 typedef struct operation_stack {

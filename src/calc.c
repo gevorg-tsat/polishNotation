@@ -70,7 +70,6 @@ bool is_number(const char *current_pos) {
 bool is_x(const char *current_pos) {
     char x;
     sscanf(current_pos, "%c", &x);
-    char *functions = "sctgqln";
     if (x == 'x') {
         return true;
     }

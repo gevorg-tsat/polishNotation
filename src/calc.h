@@ -40,7 +40,6 @@ typedef struct operation_node {
         double value;
         char variable;
     };
-
 } operation_node;
 
 typedef struct operation_stack {
