@@ -41,9 +41,7 @@ int main() {
     double* array = (double*)malloc(sizeof(double) * LENGTH);
     fill_array(array, str);
 
-    for (int i = 0; i < LENGTH; ++i) {
-        printf("%lf ", array[i]);
-    }
+    print_graph(array);
 
     return 0;
 }
