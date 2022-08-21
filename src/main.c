@@ -14,6 +14,7 @@ int main() {
         n++;
         char *temp = realloc(str, n*sizeof(char));
         if (!temp) {
+            free(str);
             return 1;
         }
         str = temp;
@@ -32,15 +33,18 @@ int main() {
     spaces_fix(str);
     unar_nul(str, strlen(str));
     if (brackets(str)) {
+        free(str);
         printf("brackets error\n");
         return 1;
     }
 
     if (first_last_sym(str, strlen(str))) {
+        free(str);
         printf("syntax error\n");
         return 1;
     }
     if (operator_check(str, strlen(str), 1) == 0) {
+        free(str);
         printf("syntax error\n");
         return 1;
     }

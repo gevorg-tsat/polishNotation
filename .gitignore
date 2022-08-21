@@ -11,6 +11,9 @@
 *.ilk
 *.map
 *.exp
+*.out
+build/graph
+
 
 # Precompiled Headers
 *.gch
