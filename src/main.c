@@ -1,40 +1,41 @@
-#include "calc.h"
-#include "operation_stack.h"
+#include "parsing.h"
 #include <stdio.h>
 
 int main() {
-    char *str = "4 5 x / +";
-
-    operation_stack* stack = stack_from_expression(str);
-    // printf("value = %lf\n", stack->operations_list[0].value);
-    // printf("value = %lf\n", stack->operations_list[1].value);
-    // printf("variable = %c\n", stack->operations_list[2].variable);
-    // printf("operator = %c\n", stack->operations_list[3].operation);
-    // printf("function = %c\n", stack->operations_list[4].operation);
-
-
-    // for (int i = 0; i < stack->size; ++i) {
-    //     printf("%d %c", stack->operations_list[i].type, (char)stack->operations_list[i].value);
-    // }
-    // printf("\n");
-    // for (int i = 0; i < 5; ++i) {
-    //     printf("%d \n", top_operation_stack(stack)->type);
-    //     pop_operation_stack(stack);
-    // }
-
-    double exp_result;
-    int res = calc_exp_postfix(stack, 3, &exp_result);
-    if (res) {
-        return -1;
+    char *str_temp;
+    int n = 0;
+    str_temp = malloc(sizeof(char));
+    int flag = 1;
+    while (flag) {
+        n++;
+        str_temp = realloc(str_temp, n*sizeof(char));
+        scanf("%c", &str_temp[n-1]);
+        if (str_temp[n-1] == '\n') {
+        str_temp[n-1] = '\0';
+        flag = 0;
+        }
     }
-    printf("\n%lf\n", exp_result);
-    
+    str_temp = realloc(str_temp, 2*n*sizeof(char));
+    spaces_fix(str_temp);
+    char *str = str_temp;
+    if (brackets(str)) {
+        printf("brackets error");
+        return 1;
+    }
+    unar_nul(str, strlen(str));
+
+    if (first_last_sym(str, strlen(str))) {
+        printf("syntax error");
+        return 1;
+    }
+    if (operator_check(str, strlen(str), 1) == 0) {
+        printf("andrey error");
+    }
+    if (sign_check(str, strlen(str), 0)) {
+        printf("artem error");
+        return 1;
+    }
+    str = str_to_polish(str);
+    printf("%s", str);
     return 0;
 }
-
-/*
-    value = 1,
-    operator= 2,
-    function = 3,
-    variable = 4,
-*/
