@@ -175,3 +175,4 @@ struct node* stacking(struct node* root, int prior, char c, char *polish, int *n
     }
     return root;
 }
+
