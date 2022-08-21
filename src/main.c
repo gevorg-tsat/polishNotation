@@ -9,6 +9,7 @@ int main() {
     int n = 0;
     str = malloc(sizeof(char));
     int flag = 1;
+    printf("y = ");
     while (flag) {
         n++;
         char *temp = realloc(str, n*sizeof(char));
@@ -29,18 +30,18 @@ int main() {
         }
     str = temp;
     spaces_fix(str);
+    unar_nul(str, strlen(str));
     if (brackets(str)) {
-        printf("brackets error");
+        printf("brackets error\n");
         return 1;
     }
-    unar_nul(str, strlen(str));
 
     if (first_last_sym(str, strlen(str))) {
-        printf("syntax error");
+        printf("syntax error\n");
         return 1;
     }
     if (operator_check(str, strlen(str), 1) == 0) {
-        printf("syntax error");
+        printf("syntax error\n");
         return 1;
     }
     str = str_to_polish(str);

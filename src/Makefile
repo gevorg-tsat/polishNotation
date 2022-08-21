@@ -4,13 +4,17 @@ CALCULATE_HEADER=$(CALCULATE:.c=.h)
 
 OPERATION_STACK=operation_stack.c
 OPERATION_STACK_HEADER=$(OPERATION_STACK:.c=.h)
+PARSING=parsing.c
+PARSING_HEADER=$(PARSING:.c=.h)
+STACK_FOR_PARSING=stack.c
+STACK_FOR_PARSING_HEADER=$(STACK_FOR_PARSING:.c=.h)
+PRINT_GRAPH=print_graph.c
+PRINT_GRAPH_HEADER=$(PRINT_GRAPH:.c=.h)
+BUILD_DIR=../build
 
-BUILD_DIR=build_dir
+SRCS=$(CALCULATE) $(OPERATION_STACK) $(PARSING) $(STACK_FOR_PARSING) $(PRINT_GRAPH)
 
-SRCS=$(CALCULATE) $(OPERATION_STACK) parsing.c stack.c print_graph.c
-
-FILES=$(CALCULATE) $(CALCULATE_HEADER)  $(OPERATION_STACK) $(OPERATION_STACK_HEADER) parsing.c stack.c print_graph.c main.c parsing.h print_graph.h stack.h
-
+FILES=$(SRCS) $(CALCULATE_HEADER) $(OPERATION_STACK_HEADER) $(PRINT_GRAPH_HEADER) $(PARSING_HEADER) $(STACK_FOR_PARSING_HEADER) main.c
 
 check:
 	python3 ../materials/linters/cpplint.py --extensions=c $(FILES)
@@ -32,7 +36,7 @@ $(BUILD_DIR):
 
 clean:
 	rm -rf *.o
-	rm -rf build_dir
+	rm -rf $(BUILD_DIR)
 
 run:
 	$(BUILD_DIR)/$(CALCULATE:.c=)

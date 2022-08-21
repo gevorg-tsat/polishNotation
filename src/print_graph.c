@@ -21,7 +21,7 @@ void print_graph(const double* data) {
     double y_step = ((double)Y_UP - Y_DOWN) / OSY;
     for (int i = 0; i < OSX; i++) {
         for (int j = 0; j < OSY; j++) {
-            if ((data[i] >= Y_DOWN + j*y_step) && (data[i] <+ Y_DOWN + (j + 1) * y_step))
+            if ((data[i] >= Y_DOWN + j*y_step) && (data[i] <= Y_DOWN + (j + 1) * y_step))
                 A[j][i] = '*';
             else
                 A[j][i] = '.';

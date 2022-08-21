@@ -188,10 +188,6 @@ int first_last_sym(char* str, int n) {
         flag = 1;
     if (str[n-1] == '+' || str[n-1] == '/' || str[n-1] == '*' || str[n-1] == '-')
         flag = 1;
-    if (str[0] == 'x' && (strchr(numbers, str[1]) != NULL || str[1] == '('))
-        flag = 1;
-    if (str[n - 1] == 'x' && (strchr(numbers, str[n - 1]) != NULL || str[n - 1] == ')'))
-        flag = 1;
     return flag;
 }
 
