@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "calc.h"
 #include "operation_stack.h"
+#include "print_graph.h"
 
 int main() {
     char *str_temp;
@@ -36,12 +37,13 @@ int main() {
     }
     str = str_to_polish(str);
     printf("%s\n", str);
-    operation_stack* stack = stack_from_expression(str);
     double exp_result;
-    int res = calc_exp_postfix(stack, -1, &exp_result);
-    if (res) {
-        return -1;
+    double* array = (double*)malloc(sizeof(double) * LENGTH);
+    fill_array(array, str);
+
+    for (int i = 0; i < LENGTH; ++i) {
+        printf("%lf ", array[i]);
     }
-    printf("\n%lf\n", exp_result);
+
     return 0;
 }

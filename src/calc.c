@@ -208,7 +208,7 @@ int calc_exp_postfix(const operation_stack * expression, double var, double* exp
     // }
     while (empty_operation_stack(copy_expression)) {
         operation_node oper = *top_operation_stack(copy_expression);
-        printf("type = %d\n", oper.type);
+        // printf("type = %d\n", oper.type);
         int res = pop_operation_stack(copy_expression);
         if (res) {
             return res;
@@ -216,13 +216,13 @@ int calc_exp_postfix(const operation_stack * expression, double var, double* exp
         switch (oper.type) {
         case variable: {
             operation_node tmp = {.value = var, .type = value};
-            printf("variable = %c\n", oper.variable);
+            // printf("variable = %c\n", oper.variable);
             operation_stack_push_back(operands, tmp);
             break;
         }
         case value: {
             int res = operation_stack_push_back(operands, oper);
-            printf("value = %f\n,", oper.value);
+            // printf("value = %f\n,", oper.value);
             if (res) {
                 return res;
             }
@@ -230,14 +230,14 @@ int calc_exp_postfix(const operation_stack * expression, double var, double* exp
         }
         case operator: {
             double right_operand = top_operation_stack(operands)->value;
-            printf("operator = %c\n", oper.operation);
-            printf("right operand = %lf ", right_operand);
+            // printf("operator = %c\n", oper.operation);
+            // printf("right operand = %lf ", right_operand);
             int res = pop_operation_stack(operands);
             if (res) {
                 return res;
             }
             double left_operand = top_operation_stack(operands)->value;
-            printf("left operand = %lf\n", left_operand);
+            // printf("left operand = %lf\n", left_operand);
             res = pop_operation_stack(operands);
             if (res) {
                 return res;
@@ -252,8 +252,8 @@ int calc_exp_postfix(const operation_stack * expression, double var, double* exp
             break;
         }
         case function: {
-            printf("function = %c\n", oper.operation);
-            printf("value = %c\n", oper.variable);
+            // printf("function = %c\n", oper.operation);
+            // printf("value = %c\n", oper.variable);
             double unar_operand = top_operation_stack(operands)->value;
             int res = pop_operation_stack(operands);
             if (res) {
