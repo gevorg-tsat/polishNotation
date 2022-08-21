@@ -23,6 +23,7 @@ int main() {
         }
     }
     char *temp = realloc(str, 2*n*sizeof(char));
+    free(str);
     if (!temp) {
             return 1;
         }
@@ -43,11 +44,11 @@ int main() {
         return 1;
     }
     str = str_to_polish(str);
-    printf("%s\n", str);
     double* array = (double*)malloc(sizeof(double) * LENGTH);
     fill_array(array, str);
 
     print_graph(array);
-
+    free(array);
+    free(str);
     return 0;
 }
