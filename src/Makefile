@@ -1,4 +1,4 @@
-.PHONY: build check clean run build_lib
+.PHONY: build check clean run build_lib all
 TARGET=graph
 CALCULATE=calc.c
 CALCULATE_HEADER=$(CALCULATE:.c=.h)
@@ -24,7 +24,7 @@ check:
 	cppcheck --enable=all --suppress=missingIncludeSystem $(FILES)
 # clang-tidy $(FILES)
 
-
+all: build
 build: $(BUILD_DIR)/$(TARGET:.c=)
 
 CFLAGS+= -Werror -Wextra -Wall -Wimplicit -Wpedantic
@@ -49,4 +49,4 @@ clean:
 	rm -rf $(BUILD_DIR)
 
 run:
-	$(BUILD_DIR)/$(CALCULATE:.c=)
+	$(BUILD_DIR)/$(TARGET:.c=)

@@ -186,7 +186,7 @@ void unar_nul(char *str, int n) {
     }
 }
 
-int first_last_sym(char *str, int n) {
+int first_last_sym(const char *str, int n) {
     int flag = 0;
     if (str[ 0 ] == '+' || str[ 0 ] == '/' || str[ 0 ] == '*'
         || str[ 0 ] == '.')
@@ -203,32 +203,33 @@ int operator_check(char *str, int n, int flag_next) {
     char numbers[ 11 ] = "1234567890";
     if (str[ 0 ] == '+') flag = 0;
     for (int i = 0; i < n && flag; i++) {
-        if (str[ i ] == 's' && (str + i == strstr(str + i, "sqrt(")))
+        if (str[ i ] == 's' && (str + i == strstr(str + i, "sqrt("))) {
             i = i + 3;
-        else if (str[ i ] == 's' && (str + i == strstr(str + i, "sin(")))
+        } else if (str[ i ] == 's' && (str + i == strstr(str + i, "sin("))) {
             i = i + 2;
-        else if (str[ i ] == 'c' && (str + i == strstr(str + i, "cos(")))
+        } else if (str[ i ] == 'c' && (str + i == strstr(str + i, "cos("))) {
             i = i + 2;
-        else if (str[ i ] == 'c' && (str + i == strstr(str + i, "ctg(")))
+        } else if (str[ i ] == 'c' && (str + i == strstr(str + i, "ctg("))) {
             i = i + 2;
-        else if (str[ i ] == 't' && (str + i == strstr(str + i, "tan(")))
+        } else if (str[ i ] == 't' && (str + i == strstr(str + i, "tan("))) {
             i = i + 2;
-        else if (str[ i ] == 'l' && (str + i == strstr(str + i, "ln(")))
+        } else if (str[ i ] == 'l' && (str + i == strstr(str + i, "ln("))) {
             i = i + 1;
-        else if ((strchr("+*/-", str[ i ]) != NULL && flag_next)
-                 || (str[ i ] == '('))
+        } else if ((strchr("+*/-", str[ i ]) != NULL && flag_next)
+                   || (str[ i ] == '(')) {
             flag = operator_check(str + i + 1, 1, 0);
-        else if ((str[ i ] == ')' && flag_next)
-                 || (strchr(numbers, str[ i ]) != NULL)
-                 || (str[ i ] == '.'
-                     && ((str[ i - 1 ] >= 48 && str[ i - 1 ] <= 57)
-                         && (str[ i + 1 ] >= 48 && str[ i + 1 ] <= 57)))) {
+        } else if ((str[ i ] == ')' && flag_next)
+                   || (strchr(numbers, str[ i ]) != NULL)
+                   || (str[ i ] == '.'
+                       && ((str[ i - 1 ] >= 48 && str[ i - 1 ] <= 57)
+                           && (str[ i + 1 ] >= 48 && str[ i + 1 ] <= 57)))) {
         } else if (str[ i ] == 'x' && (i == 0 || i == n - 1)) {
         } else if (str[ i ] == 'x' && strchr(numbers, str[ i + 1 ]) == NULL
                    && strchr(numbers, str[ i - 1 ]) == NULL
                    && str[ i + 1 ] != '(' && str[ i - 1 ] != ')') {
-        } else
+        } else {
             flag = 0;
+        }
     }
     return flag;
 }
