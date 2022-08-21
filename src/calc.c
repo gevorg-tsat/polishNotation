@@ -17,6 +17,14 @@ operation_stack *stack_from_expression(char *expression) {
         if (is_eof(expression)) {
             break;
         }
+        if (is_x(expression)) {
+            operation_node new_node = {.type = variable, .variable = 'x'};
+            int res = operation_stack_push_back(stack, new_node);
+            if (!res) {
+                return NULL;
+            }
+            expression = strchr(expression, ' ');
+        }
         if (is_number(expression)) {
             double number = 0;
             sscanf(expression, "%lf", &number);
@@ -57,6 +65,16 @@ operation_stack *stack_from_expression(char *expression) {
 bool is_number(const char *current_pos) {
     double x;
     return sscanf(current_pos, "%lf", &x);
+}
+
+bool is_x(const char *current_pos) {
+    char x;
+    sscanf(current_pos, "%c", &x);
+    char *functions = "sctgqln";
+    if (x == 'x') {
+        return true;
+    }
+    return false;
 }
 
 bool is_function(const char *current_pos) {

@@ -30,6 +30,7 @@ typedef enum operation_type {
     value = 1,
     operator= 2,
     function = 3,
+    variable = 4,
 } operation_type;
 
 typedef struct operation_node {
@@ -37,6 +38,7 @@ typedef struct operation_node {
     union {
         OPERATORS operation;
         double value;
+        char variable;
     };
 
 } operation_node;
