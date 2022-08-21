@@ -139,8 +139,8 @@ char* str_to_polish(char *str) {
                 root = pop(root);
             }
             root = pop(root);
-            if (root->data == 'c' || root->data == 's' || root->data == 'q' || root->data == 'g'
-                || root->data == 'l' || root->data == 't') {
+            if (root && (root->data == 'c' || root->data == 's' || root->data == 'q' || root->data == 'g'
+                || root->data == 'l' || root->data == 't')) {
                 polish[n++] = ' ';
                 polish[n++] = root -> data;
                 root = pop(root);
@@ -163,15 +163,17 @@ struct node* stacking(struct node* root, int prior, char c, char *polish, int *n
     } else {
         root = push(root, c, prior);
         struct node *tmp = root;
-        while ((tmp -> next) && (tmp -> next -> data != '(')) {
-            if (tmp -> next -> prior > prior) {
-                polish[(*n)++] = ' ';
-                polish[(*n)++] = tmp -> next -> data;
-                tmp -> next = pop(tmp -> next);
+        if (c != '(') {
+            while ((tmp->next) && (tmp->next->data != '(')) {
+                if (tmp->next->prior > prior) {
+                    polish[(*n)++] = ' ';
+                    polish[(*n)++] = tmp->next->data;
+                    tmp->next = pop(tmp->next);
+                } else
+                    tmp = tmp->next;
             }
-            else
-                tmp = tmp -> next;
         }
     }
     return root;
 }
+
