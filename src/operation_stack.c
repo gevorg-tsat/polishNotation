@@ -149,6 +149,10 @@ int pop_operation_stack(operation_stack *op_stack) {
     if (op_stack->size == 0) {
         return success;
     }
+    if (op_stack->size == 1) {
+        --op_stack->size;
+        return success;
+    }
     if (--op_stack->size * 4 <= op_stack->_capacity) {
         int res = shrink_operation_stack(op_stack);
         if (!res) {

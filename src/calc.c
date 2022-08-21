@@ -29,6 +29,7 @@ operation_stack *stack_from_expression(char *expression) {
                 return stack;
             }
             expression = tmp;
+            continue;
         }
         if (is_number(expression)) {
             double number = 0;
@@ -43,6 +44,7 @@ operation_stack *stack_from_expression(char *expression) {
                 return stack;
             }
             expression = tmp;
+            continue;
         }
         if (is_function(expression)) {
             char func = '\0';
@@ -57,6 +59,7 @@ operation_stack *stack_from_expression(char *expression) {
                 return stack;
             }
             expression = tmp;
+            continue;
         }
         if (is_operator(expression)) {
             char oper = '\0';
@@ -71,8 +74,9 @@ operation_stack *stack_from_expression(char *expression) {
                 return stack;
             }
             expression = tmp;
+            continue;
         }
-            ++expression;
+            //++expression;
         
     }
     return stack;
