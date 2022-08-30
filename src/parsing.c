@@ -181,9 +181,8 @@ void unar_nul(char* str, int n) {
     }
 }
 
-int first_last_sym(char* str, int n) {
+int first_last_sym(const char* str, int n) {
     int flag = 0;
-    char numbers[11] = "1234567890";
     if (str[0] == '+' || str[0] == '/' || str[0] == '*' || str[0] == '.')
         flag = 1;
     if (str[n-1] == '+' || str[n-1] == '/' || str[n-1] == '*' || str[n-1] == '-')
