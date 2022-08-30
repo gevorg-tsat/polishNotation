@@ -24,23 +24,26 @@ int main() {
         }
     }
     char *temp = realloc(str, 2*n*sizeof(char));
-    free(str);
     if (!temp) {
-            return 1;
-        }
+        free(str);
+        return 1;
+    }
     str = temp;
     spaces_fix(str);
     unar_nul(str, strlen(str));
     if (brackets(str)) {
         printf("brackets error\n");
+        free(str);
         return 1;
     }
 
     if (first_last_sym(str, strlen(str))) {
+        free(str);
         printf("syntax error\n");
         return 1;
     }
     if (operator_check(str, strlen(str), 1) == 0) {
+        free(str);
         printf("syntax error\n");
         return 1;
     }
